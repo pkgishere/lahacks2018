@@ -9,5 +9,21 @@ config = {
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 
-data = {"name": "Mortimer 'Morty' Smith"}
-db.child("commands").update()
+d = {
+	"name": "Dance",
+	"call": "intent1",
+	"actions":[
+		{
+			"actionName":"actionCall"
+		},
+		{
+			"actionName": "actionCall"
+		},
+		{
+			"actionName": "actionCall"
+		}
+	]
+}
+
+commands = [d,d,d]
+db.child("commands").push(commands)

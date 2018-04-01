@@ -1,0 +1,160 @@
+{
+  "id": "3c24f360-efb1-4bfd-97f9-06ac5458fc6d",
+  "name": "Learning_Move",
+  "auto": true,
+  "contexts": [
+    "Learning",
+    "NewCommand"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [
+        {
+          "name": "Learning",
+          "parameters": {},
+          "lifespan": 5
+        },
+        {
+          "name": "NewCommand",
+          "parameters": {},
+          "lifespan": 2
+        }
+      ],
+      "parameters": [
+        {
+          "id": "97e00c8b-8dce-4948-93c4-3c85689045bb",
+          "required": false,
+          "dataType": "@direction",
+          "name": "direction",
+          "value": "$direction",
+          "prompts": [],
+          "defaultValue": "forward",
+          "isList": false
+        },
+        {
+          "id": "e6694019-5ef8-472a-bc4b-a5054a6e32db",
+          "required": false,
+          "dataType": "@sys.number",
+          "name": "number",
+          "value": "$number",
+          "prompts": [],
+          "defaultValue": "1",
+          "isList": false
+        }
+      ],
+      "messages": [
+        {
+          "type": 0,
+          "speech": "Ok Learning and Moving $direction $number units"
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "cortanaCommand": {
+    "navigateOrService": "NAVIGATE",
+    "target": ""
+  },
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "lastUpdate": 1522533505,
+  "fallbackIntent": false,
+  "events": [],
+  "userSays": [
+    {
+      "id": "cf40bf97-5bc2-4669-b7de-25d21541ffa6",
+      "data": [
+        {
+          "text": "move "
+        },
+        {
+          "text": "forward",
+          "alias": "direction",
+          "meta": "@direction",
+          "userDefined": true
+        },
+        {
+          "text": " "
+        },
+        {
+          "text": "10",
+          "alias": "number",
+          "meta": "@sys.number",
+          "userDefined": true
+        },
+        {
+          "text": " units"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0,
+      "updated": 1522533479,
+      "isAuto": false
+    },
+    {
+      "id": "50b9aa8c-3990-490b-94b3-f7b19f90f443",
+      "data": [
+        {
+          "text": "move "
+        },
+        {
+          "text": "forward",
+          "alias": "direction",
+          "meta": "@direction",
+          "userDefined": false
+        },
+        {
+          "text": " "
+        },
+        {
+          "text": "10",
+          "alias": "number",
+          "meta": "@sys.number",
+          "userDefined": false
+        },
+        {
+          "text": " steps"
+        }
+      ],
+      "isTemplate": false,
+      "count": 1,
+      "updated": 1522533479,
+      "isAuto": false
+    },
+    {
+      "id": "deb82ef7-953b-434b-a48f-c8167bb7d376",
+      "data": [
+        {
+          "text": "drive "
+        },
+        {
+          "text": "left",
+          "alias": "direction",
+          "meta": "@direction",
+          "userDefined": false
+        },
+        {
+          "text": " "
+        },
+        {
+          "text": "10",
+          "alias": "number",
+          "meta": "@sys.number",
+          "userDefined": false
+        },
+        {
+          "text": " steps"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0,
+      "updated": 1522533479,
+      "isAuto": false
+    }
+  ],
+  "followUpIntents": [],
+  "templates": []
+}

@@ -5,9 +5,10 @@ import logging
 from logging import Formatter, FileHandler
 from time import gmtime, strftime
 import botInterface as bot
-
-
+import customCommand as cc
 app=Flask(__name__)
+
+isListening = False
 
 @app.route('/lahacks',methods=['POST'])
 def LaHacks():
@@ -17,59 +18,12 @@ def LaHacks():
 	pprint(req)
 	res = processRequest(req)
 
-	app.logger.debug("Response json:\n"+res)
+	app.logger.debug("Response json:\n"+str(res))
 
 	r = make_response(res)
 	r.headers['Content-Type'] = 'application/json'
-
 	return r
-#
-# hi = {
-#   "responseId": "7934e93d-2a82-4f9a-a79c-2038f8947bce",
-#   "queryResult": {
-#     "queryText": "move 10 units left",
-#     "parameters": {
-#       "number": 10,
-#       "direction": "left"
-#     },
-#     "allRequiredParamsPresent": true,
-#     "fulfillmentText": "Ok, moving left 10 units",
-#     "fulfillmentMessages": [
-#       {
-#         "text": {
-#           "text": [
-#             "Ok, moving left 10 units"
-#           ]
-#         }
-#       }
-#     ],
-#     "outputContexts": [
-#       {
-#         "name": "projects/aiclub-a0691/agent/sessions/efa53a48-984a-4386-80f7-7a7bffe11df4/contexts/movement",
-#         "lifespanCount": 2,
-#         "parameters": {
-#           "direction": "left",
-#           "direction.original": "left",
-#           "number": 10,
-#           "number.original": "10"
-#         }
-#       }
-#     ],
-#     "intent": {
-#       "name": "projects/aiclub-a0691/agent/intents/4b19b3f6-7d2a-4e42-ad8b-37fd8b9adc5f",
-#       "displayName": "Move"
-#     },
-#     "intentDetectionConfidence": 1,
-#     "diagnosticInfo": {
-#       "webhook_latency_ms": 3
-#     },
-#     "languageCode": "en"
-#   },
-#   "webhookStatus": {
-#     "code": 3,
-#     "message": "Webhook call failed. Error: Webhook response was empty."
-#   }
-# }
+
 
 def parseMove(context):
 	direction = context['parameters']['direction']
@@ -90,28 +44,40 @@ def parseLED(context):
 	return buildResponse('Ok, turning LED {}!'.format(state))
 
 def processRequest(req):
-
+	global isListening
+	global customCommand
 	pprint(req)
 	intent = req['queryResult']['intent']['displayName']
+	queryText = req['queryResult']['queryText']
 	print(intent)
-	if intent == 'HiReply':
+	if intent == 'Learning_Stop':
+		isListening = False
+		customCommand.saveCommand()
+		return buildResponse('Ok, got it!')
+	elif isListening:
+		customCommand.actions.append(queryText)
+		print(customCommand.actions)
+		return buildResponse('Ok, learning: {}!'.format(queryText))
+	elif intent == 'HiReply':
 		return buildResponse('this is a hiReply')
 	elif intent == 'Move':
-		# bot.move()
 		context = detectcontext(req,'movement')
 		return parseMove(context)
-
 	elif intent == 'LedTrigger':
 		context = detectcontext(req,'ledtrigger')
 		return parseLED(context)
-
-
-	elif intent == 'Rotate':
+	elif intent == 'Rotation':
 		context = detectcontext(req,'rotate')
 		return parseRotation(context)
-
+	elif intent == 'Learning_Begins':
+		isListening = True
+		context = detectcontext(req,'learning')
+		commandName = context['parameters']['any']
+		customCommand = cc.CustomCommand(commandName)
+		return buildResponse('Ok, what should i learn?')
 	else:
 		return buildResponse("Not sure what you're saying?")
+
 
 
 def detectcontext(req,targetContext):
@@ -125,13 +91,10 @@ def pprint(text):
 	print(json.dumps(text,indent=4))
 
 def buildResponse(reply):
-
 	response = {
 		"fulfillmentText":reply
 	}
-
 	return json.dumps(response)
-
 
 
 if __name__ == '__main__':
