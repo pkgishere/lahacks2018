@@ -1,6 +1,9 @@
 import paho.mqtt.publish as publish
 
-for i in range(1, 10):
-    publish.single("anith/test", "Hello", hostname = "test.mosquitto.org")
-    publish.single("anith/topic", "World!", hostname = "test.mosquitto.org")
-    print("Done")               
+
+publish.single("anith/test", "Led", hostname = "test.mosquitto.org")
+publish.single("anith/topic", "Forward", hostname = "test.mosquitto.org")
+publish.single("avyay/test", "Left", hostname = "test.mosquitto.org")
+publish.single("avyay/topic", "Right", hostname = "test.mosquitto.org")
+
+print("Done")  
